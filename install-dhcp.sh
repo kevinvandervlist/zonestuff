@@ -10,11 +10,16 @@ if [ $# -ne 1 ]; then
     exit 1
 fi
 
+if [ $UID -ne 0 ]; then
+    echo "Not run as root"
+    exit 2
+fi
+
 name=$1
 
 if [ -e /etc/zones/$name.xml ]; then
     echo "Zone $name allready has a config"
-    exit 2
+    exit 3
 fi
 
 echo "Give a root password"

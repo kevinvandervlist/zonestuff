@@ -4,6 +4,11 @@ if [ $# -ne 1 ]; then
     exit 1
 fi
 
+if [ $UID -ne 0 ]; then
+    echo "Not run as root"
+    exit 2
+fi
+
 name=$1
 vnic=zv_${name}0
 
@@ -20,5 +25,5 @@ if [ -e /etc/zones/$name.xml ]; then
     exit 0
 else
     echo "Zone $name has no config."
-    exit 2
+    exit 3
 fi
