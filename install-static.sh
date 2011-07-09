@@ -1,12 +1,15 @@
 #!/usr/bin/bash
 nic=rge0
 domain=vdv
-dns=192.168.111.254
+dns=192.168.111.1
+defrouter=192.168.111.254
+netmask=255.255.255.0
+netmask_short=/24
 terminal=xterm
 autoboot=false
 
-if [ $# -ne 1 ]; then
-    echo "Please supply a zone name"
+if [ $# -ne 2 ]; then
+    echo "Please supply a zone name and an IP address."
     exit 1
 fi
 
@@ -16,6 +19,7 @@ if [ $UID -ne 0 ]; then
 fi
 
 name=$1
+ipaddr=$2
 
 if [ -e /etc/zones/$name.xml ]; then
     echo "Zone $name allready has a config"
@@ -25,19 +29,15 @@ fi
 echo "Give a root password"
 root=$(openssl passwd)
 
-vnic="zv_${name}0"
-echo "Attaching virtual $vnic to $nic"
-dladm create-vnic -l $nic $vnic
-
 echo "Configuring $name.xml..."
 
 zonecfg -z $name << EOF &> /dev/null
   create
   set zonepath=/zones/$name
   set autoboot=$autoboot
-  set ip-type=exclusive
   add net
-  set physical=$vnic
+  set physical=$nic
+  set address=${ipaddr}${netmask_short}
   end
   commit
   exit
@@ -57,7 +57,7 @@ root_password=$root
 security_policy=none
 nfs4_domain=dynamic
 name_service=DNS {domain_name=$domain name_server=$dns}
-network_interface=primary {dhcp protocol_ipv6=no}" > /tmp/$name.tmp
+network_interface=primary {hostname=$name ip_address=$ipaddr netmask=$netmask default_route=$defrouter protocol_ipv6=no}" > /tmp/$name.tmp
 
 mv /tmp/$name.tmp /zones/$name/root/etc/sysidcfg
 
