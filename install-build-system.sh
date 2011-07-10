@@ -1,5 +1,5 @@
 #!/usr/bin/bash
-packages="pkg:/file/gnu-coreutils pkg:/SFEcmake pkg:/SFEemacs pkg:/SFEgcc pkg:/SFEgcc-46 pkg:/SFEgcc-46-runtime pkg:/SFEgccruntime pkg:/SFEgit pkg:/developer/build/gnu-make pkg:/developer/build/gnu-make pkg:/developer/library/lint pkg:/developer/versioning/subversion pkg:/text/gnu-grep"
+packages="pkg:/file/gnu-coreutils pkg:/SFEcmake pkg:/SFEemacs pkg:/SFEgcc pkg:/SFEgcc-46 pkg:/SFEgcc-46-runtime pkg:/SFEgccruntime pkg:/SFEgit pkg:/developer/build/gnu-make pkg:/developer/build/gnu-make pkg:/developer/library/lint pkg:/developer/versioning/subversion pkg:/text/gnu-grep pkg:/system/header"
 
 if [ $# -ne 1 ]; then
     echo "Please supply a zone name."
